@@ -78,7 +78,7 @@ public class EventBus {
 
             if (currentHandler instanceof Class)
                 methods = ((Class) currentHandler).getMethods();
-            else
+             else
                 methods = currentHandler.getClass().getMethods();
 
             ArrayList<Method> valid = new ArrayList<Method>();
@@ -95,6 +95,8 @@ public class EventBus {
 
                 if (!event.getClass().getSimpleName().equals(params[0].getSimpleName()))
                     continue;
+
+                if (!method.isAccessible()) continue;
 
                 valid.add(method);
             }
