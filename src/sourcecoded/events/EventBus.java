@@ -14,6 +14,22 @@ public class EventBus {
         listeners.add(object);
     }
 
+    public void unregister(Object object) {
+        listeners.remove(object);
+    }
+
+    public void unregisterAllOfType(Class type) {
+        for (Object curr : listeners.toArray()) {
+            Class currClass;
+           if (curr instanceof Class)
+               currClass = (Class) curr;
+           else currClass = curr.getClass();
+
+            if (currClass == type)
+                listeners.remove(curr);
+        }
+    }
+
     public List<Object> getListeners() {
         return Collections.unmodifiableList(listeners);
     }
