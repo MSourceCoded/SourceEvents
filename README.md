@@ -51,7 +51,7 @@ SourceEvents is a simple Event System API developed for Java.
   
   ```java
     @EventListener
-    public void yourMethod(YourEvent event) {
+    public static void yourMethod(YourEvent event) {
       event.setCancelled(true);
     }
   ```
@@ -68,11 +68,11 @@ SourceEvents is a simple Event System API developed for Java.
   A sample implementation is seen below
   ```java
     @EventListener
-    public void standardListener(YourEvent event) {}
+    public static void standardListener(YourEvent event) {}
   
     @EventListener(priority = EventPriority.HIGHEST)
-    public void triggerMeFirst(YourEvent event) {}
+    public static void triggerMeFirst(YourEvent event) {}
     
     @EventListener(allowCancelled = true)
-    public void triggerNoMatterWhat(YourEvent event) {}
+    public static void triggerNoMatterWhat(YourEvent event) {}
   ```
