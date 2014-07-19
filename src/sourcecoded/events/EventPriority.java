@@ -1,11 +1,15 @@
 package sourcecoded.events;
 
+/**
+ * A set of Enumerators declaring the urgency, or priority, of an Event.
+ * @author SourceCoded
+ */
 public enum EventPriority {
-    HIGHEST,
+    HIGHEST,    //Triggered First
     HIGHER,
     HIGH,
     NORMAL,
     LOW,
     LOWER,
-    LOWEST
+    LOWEST      //Triggered Last
 }

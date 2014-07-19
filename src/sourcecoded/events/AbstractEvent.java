@@ -2,6 +2,11 @@ package sourcecoded.events;
 
 import sourcecoded.events.annotation.Cancelable;
 
+/**
+ * Extend this to add your own events
+ *
+ * @author SourceCoded
+ */
 public abstract class AbstractEvent {
 
     private boolean isCancelled;

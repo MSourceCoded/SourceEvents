@@ -7,6 +7,10 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+/**
+ * The EventListener annotation is used to declare a method as a Listener (or handler if you prefer) for the SourceEvents eventsystem
+ * @author SourceCoded
+ */
 @Retention(value = RetentionPolicy.RUNTIME)
 @Target(value = ElementType.METHOD)
 public @interface EventListener {
