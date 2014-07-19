@@ -82,9 +82,9 @@ public class EventBus {
 
                 if (event.isCancelled()) {
                     if (annotation.allowCancelled())
-                        method.invoke(currentHandler.newInstance(), event);
+                        method.invoke(currentHandler, event);
                 } else
-                    method.invoke(currentHandler.newInstance(), event);
+                    method.invoke(currentHandler, event);
             }
 
         }
