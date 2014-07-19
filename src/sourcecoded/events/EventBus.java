@@ -4,20 +4,18 @@ import sourcecoded.events.annotation.EventListener;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
+import java.util.*;
 
 public class EventBus {
 
-    private ArrayList<Class> listeners = new ArrayList<Class>();
+    private ArrayList<Object> listeners = new ArrayList<Object>();
 
-    public void register(Class clazz) {
-        listeners.add(clazz);
+    public void register(Object object) {
+        listeners.add(object);
     }
 
-    public ArrayList<Class> getListeners() {
-        return listeners;
+    public List<Object> getListeners() {
+        return Collections.unmodifiableList(listeners);
     }
 
     public void raiseEvent(final AbstractEvent event) {
@@ -33,8 +31,13 @@ public class EventBus {
     }
 
     private void raise(final AbstractEvent event) throws IllegalAccessException, InstantiationException, InvocationTargetException {
-        for (Class currentHandler : listeners) {
-            Method[] methods = currentHandler.getMethods();
+        for (Object currentHandler : listeners) {
+            Method[] methods;
+
+            if (currentHandler instanceof Class)
+                methods = ((Class) currentHandler).getMethods();
+             else
+                methods = currentHandler.getClass().getMethods();
 
             ArrayList<Method> valid = new ArrayList<Method>();
 
