@@ -26,6 +26,11 @@ SourceEvents is a simple Event System API developed for Java.
   ```java
     theEventBus.register(YourClass.class);
   ```
+  
+  To be noted, you can also use class instances in the form of an object if you wish. This will allow it to work with non-static fields
+  ```java
+   theEventBus.register(new YourObject());
+  ```
       
   That's all! Now you can call your events as follows:
   ```java
