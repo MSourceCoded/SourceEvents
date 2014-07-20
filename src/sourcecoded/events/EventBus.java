@@ -5,10 +5,7 @@ import sourcecoded.events.annotation.EventListener;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 /**
  * The EventBus for the SourceEvents API. This is used to register handlers and raise events
@@ -90,11 +87,13 @@ public class EventBus {
             Method[] methods;
             boolean isClass = false;
 
+
             if (currentHandler instanceof Class) {
                 methods = ((Class) currentHandler).getMethods();
                 isClass = true;
-            } else
+            } else {
                 methods = currentHandler.getClass().getMethods();
+            }
 
             ArrayList<Method> valid = new ArrayList<Method>();
 
@@ -108,8 +107,15 @@ public class EventBus {
                 if (params.length != 1)
                     continue;
 
-                if (!event.getClass().getSimpleName().equals(params[0].getSimpleName()))
+//                if (!event.getClass().getSimpleName().equals(params[0].getSimpleName()))
+//                    continue;
+
+                if (annotation.respectsInheritance() && !params[0].isAssignableFrom(event.getClass()))
                     continue;
+
+                if (!annotation.respectsInheritance() && params[0] != event.getClass())
+                    continue;
+
 
                 if (!isClass && exclusive && Modifier.isStatic(method.getModifiers())) continue;
 
