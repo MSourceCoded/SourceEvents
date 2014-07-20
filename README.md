@@ -31,6 +31,12 @@ SourceEvents is a simple Event System API developed for Java.
   ```java
    theEventBus.register(new YourObject());
   ```
+
+  There is also another option called Exclusivity, enabled as follows
+  ```java
+    theEventBus.setExclusive(true);
+  ```
+  The exclusivity setting means that instances will NOT be able to call static methods
       
   That's all! Now you can call your events as follows:
   ```java

@@ -4,6 +4,7 @@ import sourcecoded.events.annotation.EventListener;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -11,15 +12,18 @@ import java.util.List;
 
 /**
  * The EventBus for the SourceEvents API. This is used to register handlers and raise events
+ *
  * @author SourceCoded
  */
 public class EventBus {
 
     private ArrayList<Object> listeners = new ArrayList<Object>();
 
+    private boolean exclusive = false;
+
     /**
      * Register either a Class or Instance of an Object as a handler for the eventsystem
-     *
+     * <p/>
      * Instances will allow you to access non-static methods
      * Classes can only access Static methods
      */
@@ -51,6 +55,15 @@ public class EventBus {
     }
 
     /**
+     * Exclusivity setting.
+     * <p/>
+     * Set this to true if you want instances to ONLY access non-static methods. By default, this is set to false, meaning instances can access static methods
+     */
+    public void setExclusive(boolean val) {
+        exclusive = val;
+    }
+
+    /**
      * Get the listener list in the form of a read-only list
      */
     public List<Object> getListeners() {
@@ -75,10 +88,12 @@ public class EventBus {
     private void raise(final AbstractEvent event) throws IllegalAccessException, InstantiationException, InvocationTargetException {
         for (Object currentHandler : listeners) {
             Method[] methods;
+            boolean isClass = false;
 
-            if (currentHandler instanceof Class)
+            if (currentHandler instanceof Class) {
                 methods = ((Class) currentHandler).getMethods();
-             else
+                isClass = true;
+            } else
                 methods = currentHandler.getClass().getMethods();
 
             ArrayList<Method> valid = new ArrayList<Method>();
@@ -96,7 +111,9 @@ public class EventBus {
                 if (!event.getClass().getSimpleName().equals(params[0].getSimpleName()))
                     continue;
 
-                if (!method.isAccessible()) continue;
+                if (!isClass && exclusive && Modifier.isStatic(method.getModifiers())) continue;
+
+                if (isClass && !Modifier.isStatic(method.getModifiers())) continue;
 
                 valid.add(method);
             }
