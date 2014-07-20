@@ -70,11 +70,13 @@ SourceEvents is a simple Event System API developed for Java.
   EventListeners will not be triggered if the event is cancelled unless they have the argument allowCancelled = true
   
   **@EventListener**
-  EventListener is an annotation placed above methods to listen for incoming events. It has 2 properties, priority and allowCancelled.
+  EventListener is an annotation placed above methods to listen for incoming events. It has 3 properties, priority, repectIheritance and allowCancelled.
   
   priority is used to determine the urgent-ness of the listener. It takes the value in form of an EventPriority enum value. By default this is set to EventPriority.NORMAL
   
   allowCancelled, if set to true, will trigger if the event is marked as cancelled. This is set to false by default.
+  
+  respectInheritance is simple, if set to true, it will call the method if a subclass of the specified event is called. This is set to true by default.
   
   A sample implementation is seen below
   ```java
