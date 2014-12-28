@@ -68,9 +68,9 @@ public class EventBus {
     }
 
     /**
-     * Raise an event to all the available listeners
+     * Raise an event to all the available listeners in a new thread
      */
-    public void raiseEvent(final AbstractEvent event) {
+    public void raiseEventConcurrent(final AbstractEvent event) {
         new Thread() {
             public void run() {
                 try {
@@ -82,8 +82,19 @@ public class EventBus {
         }.start();
     }
 
+    /**
+     * Raise an event to all available listeners
+     */
+    public void raiseEvent(final AbstractEvent event) {
+        try {
+            raise(event);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     private void raise(final AbstractEvent event) throws IllegalAccessException, InstantiationException, InvocationTargetException {
-        for (Object currentHandler : listeners) {
+        for (Object currentHandler : (ArrayList) listeners.clone()) {
             Method[] methods;
             boolean isClass = false;
 
@@ -106,9 +117,6 @@ public class EventBus {
 
                 if (params.length != 1)
                     continue;
-
-//                if (!event.getClass().getSimpleName().equals(params[0].getSimpleName()))
-//                    continue;
 
                 if (annotation.respectsInheritance() && !params[0].isAssignableFrom(event.getClass()))
                     continue;
